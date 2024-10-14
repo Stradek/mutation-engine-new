@@ -48,7 +48,7 @@
                 },
                 "CUSTOM_MACROS_PREFIX": {
                     "type": "STRING",
-                    "value": "PROJECT_NAME_"
+                    "value": "MUTATION_ENGINE_PONG"
                 }
             },
             "condition": {

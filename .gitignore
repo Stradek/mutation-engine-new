@@ -12,6 +12,7 @@
 
 # MSBuild setting files
 *.vcxproj
+*.vcxproj.user
 *.vcxproj.filters
 
 # Build results
