@@ -4,6 +4,9 @@
 # Idea Jetbrains Rider folder
 .idea/
 
+# Visual Studio artifacts
+.vs/
+
 # Solution files
 *.sln
 

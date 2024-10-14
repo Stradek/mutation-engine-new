@@ -16,7 +16,7 @@ include(CMake/CMakeShared.cmake)
 # Project
 #
 
-project(TemplateCMakeProject)
+project(mutationengine-pong)
 
 # Setting up custom properties and functions from "CMakeShared.cmake" file
 custom_cmake_setup()
@@ -34,8 +34,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 #
 
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-get_all_target_files(FILES 0 ${SOURCE_DIR})
+get_all_target_files(FILES 1 ${SOURCE_DIR})
 
-add_executable(TemplateCMakeProject "${FILES}")
+add_executable(mutationengine-pong "${FILES}")
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT TemplateCMakeProject)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT mutationengine-pong)

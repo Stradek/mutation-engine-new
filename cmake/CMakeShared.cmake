@@ -114,6 +114,7 @@ function(custom_cmake_setup)
         "*.cpp"
         "*.hpp"
         "*.h"
+        "*.c"
         PARENT_SCOPE
     )
 

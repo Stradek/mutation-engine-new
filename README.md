@@ -1,6 +1,11 @@
-# Template CMake Project
-This project is my base for every CMake based project.
+# MutationEngine-Pong
+Game inspired by "Pong" from 1972. #1 game powered by Mutation Engine.
+Engine and game development in progress.
 
-## The most important components
-1. Batch scripts handling building, opening, and cleaning the solution.
-2. File `cmake/CMakeShared.cmake` with default defined configurations and compilation flags setup, as well as general utility functions(e.g. get_all_files_of_file_type, get_source_files, get_header_files etc.)
+## Requirements
+- gcc (On Windows: Install from MinGW distribution or download through MSYS2)
+- cmake 
+
+## Build
+1. Clone the repository
+2. Run `build.bat [Debug|Release]` in the root directory
