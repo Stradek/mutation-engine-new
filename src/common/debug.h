@@ -1,3 +1,8 @@
+/*
+    Copyright (c) 2024 Piotr Stradowski. All rights reserved.
+    Software distributed under the permissive MIT License.
+*/
+
 #pragma once
 
 #include "types.h"
@@ -68,12 +73,12 @@
 
 /************************* DEBUG BREAK *************************/
 
-bool is_debugger_attached(void);
+bool IsDebuggerAttached(void);
 
 // debug break macro
 #ifdef BUILD_DEBUG
 #define DEBUG_BREAK() \
-    if (is_debugger_attached()) \
+    if (IsDebuggerAttached()) \
     { \
         __debugbreak(); \
     } \

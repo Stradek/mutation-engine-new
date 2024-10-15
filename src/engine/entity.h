@@ -1,3 +1,8 @@
+/*
+	Copyright (c) 2024 Piotr Stradowski. All rights reserved.
+	Software distributed under the permissive MIT License.
+*/
+
 #pragma once
 
 #include "types.h"
@@ -8,4 +13,4 @@ struct Entity
     uint32 componentMask;
 };
 
-void addEntity(struct Entity *entity);
+void AddEntity(struct Entity *entity);

@@ -1,8 +1,11 @@
+/*
+	Copyright (c) 2024 Piotr Stradowski. All rights reserved.
+	Software distributed under the permissive MIT License.
+*/
+
 #pragma once
 
 #include "types.h"
-
-/************************* Renderer Settings *************************/
 
 struct RendererOptions
 {
@@ -10,15 +13,13 @@ struct RendererOptions
     uint8 targetFPS;
 };
 
-/************************* SDL *************************/
-
-int init_sdl();
-int close_sdl();
+int InitSDL();
+int CloseSDL();
 
 /************************* Renderer *************************/
 
-RendererOptions get_renderer_options();
+RendererOptions GetRendererOptions();
 
-int init_renderer();
-int render_frame();
-int close_renderer();
+int InitRenderer();
+int RenderFrame();
+int CloseRenderer();

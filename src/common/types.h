@@ -1,8 +1,11 @@
+/*
+	Copyright (c) 2024 Piotr Stradowski. All rights reserved.
+	Software distributed under the permissive MIT License.
+*/
+
 #pragma once
 
-#include <stddef.h>
 #include <stdint.h>
-#include <stdbool.h>
 
 typedef unsigned int uint;
 

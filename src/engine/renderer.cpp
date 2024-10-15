@@ -12,7 +12,7 @@ RendererOptions rendererOptions
     60
 };
 
-RendererOptions get_renderer_options()
+RendererOptions GetRendererOptions()
 {
     return rendererOptions;
 }
@@ -22,7 +22,7 @@ RendererOptions get_renderer_options()
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 
-int init_sdl() 
+int InitSDL() 
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) 
     {
@@ -49,7 +49,7 @@ int init_sdl()
     return 0;
 }
 
-int close_sdl() 
+int CloseSDL() 
 {
     if (renderer != NULL)
     {
@@ -67,16 +67,16 @@ int close_sdl()
 
 /************************* Renderer *************************/
 
-void init_renderer_options()
+void InitRendererOptions()
 {
     rendererOptions.targetFrameTime = (float)SECONDS_TO_MILLISECONDS / rendererOptions.targetFPS;
 }
 
-int init_renderer()
+int InitRenderer()
 {
-    init_renderer_options();
+    InitRendererOptions();
 
-    if (init_sdl() != 0)
+    if (InitSDL() != 0)
     {
         SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Failed to initialize SDL");
         return 1;
@@ -85,7 +85,7 @@ int init_renderer()
     return 0;
 }
 
-int render_frame()
+int RenderFrame()
 {
     SDL_SetRenderDrawColor(renderer, 94, 25, 20, 255);
     SDL_RenderClear(renderer);
@@ -94,9 +94,9 @@ int render_frame()
     return 0;
 }
 
-int close_renderer()
+int CloseRenderer()
 {
-    if (close_sdl() != 0)
+    if (CloseSDL() != 0)
     {
         SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Failed to close SDL");
         return 1;

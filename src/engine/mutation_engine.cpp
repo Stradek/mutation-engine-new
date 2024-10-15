@@ -52,7 +52,7 @@ void GameEngine::StartUp()
 {
     ENGINE_INFO("Hello! It's Mutation Engine!\n");
 
-    bool isRendererInitialized = init_renderer() == 0;
+    bool isRendererInitialized = InitRenderer() == 0;
     // ASSERT(isRendererInitialized, "Initializing renderer failed.");
 }
 
@@ -85,7 +85,7 @@ void GameEngine::EngineRun(IEngineApplication& appInstance)
             const uint64 frameTimeEnd = SDL_GetPerformanceCounter();
 
             const float elapsedFrameTime = (frameTimeEnd - frameTimeStart) / (float)SDL_GetPerformanceFrequency() * SECONDS_TO_MILLISECONDS;
-            RendererOptions rendererOptions = get_renderer_options();
+            RendererOptions rendererOptions = GetRendererOptions();
             const float timeUntilTargetFrameTime = fmax(0.0f, rendererOptions.targetFrameTime - elapsedFrameTime);
             SDL_Delay(floor(timeUntilTargetFrameTime));
         }
@@ -120,7 +120,7 @@ void GameEngine::Update()
 
 void GameEngine::RenderFrame()
 {
-    render_frame();
+    RenderFrame();
 }
 
 void GameEngine::Close()
@@ -130,6 +130,6 @@ void GameEngine::Close()
 
 void GameEngine::ShutDown()
 {
-    bool isRendererSuccessfullyClosed = close_renderer() == 0;
+    bool isRendererSuccessfullyClosed = CloseRenderer() == 0;
     // ASSERT(isRendererSuccessfullyClosed, "Initializing renderer failed.");
 }
