@@ -3,8 +3,8 @@
     Software distributed under the permissive MIT License.
 */
 
-#include "common/debug.h"
-#include "engine/mutation_engine.h"
+#include "debug.h"
+#include "mutation_engine.h"
 #include "game.h"
 
 int main(int argc, char* argv[])

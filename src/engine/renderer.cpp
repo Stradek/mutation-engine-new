@@ -1,6 +1,7 @@
 #include "renderer.h"
 
 #include "utils.h"
+#include "debug.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_log.h>
@@ -12,48 +13,39 @@ RendererOptions rendererOptions
     60
 };
 
-RendererOptions GetRendererOptions()
+RendererOptions Renderer::GetRendererOptions()
 {
     return rendererOptions;
 }
 
-/************************* SDL *************************/
-
-SDL_Window *window = NULL;
-SDL_Renderer *renderer = NULL;
-
-int InitSDL() 
+void Renderer::InitSDL() 
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) 
     {
-        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-        return 1;
+        ENGINE_CRITICAL("Unable to initialize SDL: %s", SDL_GetError());
     }
 
     window = SDL_CreateWindow("Mutation Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
     if (window == NULL) 
     {
-        SDL_Log("Unable to create window: %s", SDL_GetError());
+        ENGINE_CRITICAL("Unable to create window: %s", SDL_GetError());
         SDL_Quit();
-        return 1;
     }
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (renderer == NULL) 
+    sdlRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (sdlRenderer == NULL) 
     {
         SDL_DestroyWindow(window);
-        SDL_Log("Unable to create renderer: %s", SDL_GetError());
+        ENGINE_CRITICAL("Unable to create renderer: %s", SDL_GetError());
         SDL_Quit();
-        return 1;
     }
-    return 0;
 }
 
-int CloseSDL() 
+void Renderer::CloseSDL()
 {
-    if (renderer != NULL)
+    if (sdlRenderer != NULL)
     {
-        SDL_DestroyRenderer(renderer);
+        SDL_DestroyRenderer(sdlRenderer);
     }
 
     if (window != NULL)
@@ -62,46 +54,34 @@ int CloseSDL()
     }
 
     SDL_Quit();
-    return 0;
 }
 
-/************************* Renderer *************************/
 
-void InitRendererOptions()
+void Renderer::InitRendererOptions()
 {
     rendererOptions.targetFrameTime = (float)SECONDS_TO_MILLISECONDS / rendererOptions.targetFPS;
 }
 
-int InitRenderer()
+void Renderer::RenderFrame()
+{
+    SDL_SetRenderDrawColor(sdlRenderer, 94, 25, 20, 255);
+    SDL_RenderClear(sdlRenderer);
+
+    SDL_RenderPresent(sdlRenderer);
+}
+
+Renderer::Renderer() : window(nullptr), sdlRenderer(nullptr)
+{
+}
+
+void Renderer::StartUp()
 {
     InitRendererOptions();
 
-    if (InitSDL() != 0)
-    {
-        SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Failed to initialize SDL");
-        return 1;
-    }
-
-    return 0;
+    InitSDL();
 }
 
-int RenderFrame()
+void Renderer::ShutDown()
 {
-    SDL_SetRenderDrawColor(renderer, 94, 25, 20, 255);
-    SDL_RenderClear(renderer);
-
-    SDL_RenderPresent(renderer);
-    return 0;
+    CloseSDL();
 }
-
-int CloseRenderer()
-{
-    if (CloseSDL() != 0)
-    {
-        SDL_LogCritical(SDL_LOG_CATEGORY_ERROR, "Failed to close SDL");
-        return 1;
-    }
-
-    return 0;
-}
-

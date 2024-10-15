@@ -76,7 +76,7 @@ target_link_libraries(MutationEngine PRIVATE
 )
 
 # Include SDL2 headers
-target_include_directories(MutationEngine PRIVATE
+target_include_directories(MutationEngine PUBLIC
     "${EXTERNAL_PATH}/SDL2/include/"
 )
 
@@ -88,7 +88,11 @@ set(GAME_DIR ${SOURCE_DIR}/game)
 
 get_source_files(GAME_SOURCE_FILES 1 ${GAME_DIR})
 add_executable(Pong ${GAME_SOURCE_FILES})
-target_include_directories(Pong PRIVATE ${SOURCE_DIR})
+target_include_directories(Pong PRIVATE 
+    ${COMMON_DIR}
+    ${ENGINE_DIR}
+    ${GAME_DIR}
+)
 
 target_link_libraries(Pong PRIVATE 
     MutationEngine

@@ -5,7 +5,11 @@
 
 #pragma once
 
+#include "system.h"
 #include "types.h"
+
+#include <SDL2/SDL_video.h>
+#include <SDL2/SDL_render.h>
 
 struct RendererOptions
 {
@@ -13,13 +17,24 @@ struct RendererOptions
     uint8 targetFPS;
 };
 
-int InitSDL();
-int CloseSDL();
 
-/************************* Renderer *************************/
+class Renderer : ISystem
+{
+public:
+	Renderer();
 
-RendererOptions GetRendererOptions();
+	// Inherited via ISystem
+	void StartUp() override;
+	void ShutDown() override;
 
-int InitRenderer();
-int RenderFrame();
-int CloseRenderer();
+	void InitSDL();
+	void CloseSDL();
+
+	void InitRendererOptions();
+	static RendererOptions GetRendererOptions();
+
+	void RenderFrame();
+private:
+	SDL_Window* window;
+	SDL_Renderer* sdlRenderer;
+};
