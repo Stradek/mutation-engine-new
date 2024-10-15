@@ -7,7 +7,6 @@
 
 #include "types.h"
 #include "debug.h"
-#include "renderer.h"
 #include "utils.h"
 
 #include <SDL2/SDL.h>
@@ -52,8 +51,7 @@ void GameEngine::StartUp()
 {
     ENGINE_INFO("Hello! It's Mutation Engine!\n");
 
-    bool isRendererInitialized = InitRenderer() == 0;
-    // ASSERT(isRendererInitialized, "Initializing renderer failed.");
+    m_renderer.StartUp();
 }
 
 void GameEngine::EngineRun(IEngineApplication& appInstance)
@@ -85,7 +83,7 @@ void GameEngine::EngineRun(IEngineApplication& appInstance)
             const uint64 frameTimeEnd = SDL_GetPerformanceCounter();
 
             const float elapsedFrameTime = (frameTimeEnd - frameTimeStart) / (float)SDL_GetPerformanceFrequency() * SECONDS_TO_MILLISECONDS;
-            RendererOptions rendererOptions = GetRendererOptions();
+            RendererOptions rendererOptions = Renderer::GetRendererOptions();
             const float timeUntilTargetFrameTime = fmax(0.0f, rendererOptions.targetFrameTime - elapsedFrameTime);
             SDL_Delay(floor(timeUntilTargetFrameTime));
         }
@@ -120,7 +118,7 @@ void GameEngine::Update()
 
 void GameEngine::RenderFrame()
 {
-    RenderFrame();
+    m_renderer.RenderFrame();
 }
 
 void GameEngine::Close()
@@ -130,6 +128,5 @@ void GameEngine::Close()
 
 void GameEngine::ShutDown()
 {
-    bool isRendererSuccessfullyClosed = CloseRenderer() == 0;
-    // ASSERT(isRendererSuccessfullyClosed, "Initializing renderer failed.");
+    m_renderer.ShutDown();
 }

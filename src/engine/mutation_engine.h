@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include "renderer.h"
+
 class IEngineApplication;
 
 class GameEngine
@@ -22,7 +24,6 @@ public:
 
 	void Close();
 private:
-
 	void SetEngineApplication(IEngineApplication& appInstanceRef);
 
 	void StartUp();
@@ -35,6 +36,7 @@ private:
 
 	static GameEngine* m_instance;
 	IEngineApplication* m_appInstance;
-
 	bool m_shutDown = false;
+
+	Renderer m_renderer;
 };

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "engine/engine_application.h"
+#include "engine_application.h"
 
 class Game : public IEngineApplication
 {
