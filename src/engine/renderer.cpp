@@ -9,8 +9,8 @@
 
 RendererOptions rendererOptions = 
 {
-    .targetFrameTime = -1, // set in cpp in set_renderer_options()
-    .targetFPS = 60
+    -1, // set in cpp in set_renderer_options()
+    60
 };
 
 void init_renderer_options(void)
