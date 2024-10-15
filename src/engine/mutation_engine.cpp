@@ -1,3 +1,8 @@
+/*
+    Copyright (c) 2024 Piotr Stradowski. All rights reserved.
+    Software distributed under the permissive MIT License.
+*/
+
 #include "mutation_engine.h"
 
 #include "common/types.h"
@@ -10,28 +15,60 @@
 #include <math.h>
 #include <stdio.h>
 
-int mutation_engine_init(void) 
-{
-    ENGINE_INFO("Hello! It's Mutation Engine!\n");
-    if (init_renderer() != 0)
-    {
-        return 1;
-    }
+GameEngine* GameEngine::m_instance;
 
-    return 0;
+GameEngine::GameEngine() : m_appInstance(nullptr)
+{
 }
 
-int mutation_engine_run_loop(void) 
+GameEngine& GameEngine::GetInstance()
 {
-    bool running = true;
+    if (!m_instance)
+    {
+        m_instance = new GameEngine();
+        // ENGINE_ASSERT(m_instance, "Failed to allocate engine instance.");
+    }
+    return *m_instance;
+}
+
+void GameEngine::DestroyInstance()
+{
+}
+
+void GameEngine::Run(IEngineApplication& appInstance)
+{
+    // Core::Log::Init();
+
+    {
+        GameEngine& engineInstance = GameEngine::GetInstance();
+        engineInstance.EngineRun(appInstance);
+    }
+
+    GameEngine::DestroyInstance();
+    // Core::Log::Close();
+}
+
+void GameEngine::StartUp()
+{
+    ENGINE_INFO("Hello! It's Mutation Engine!\n");
+
+    bool isRendererInitialized = init_renderer() == 0;
+    // ASSERT(isRendererInitialized, "Initializing renderer failed.");
+}
+
+void GameEngine::EngineRun(IEngineApplication& appInstance)
+{
+    SetEngineApplication(appInstance);
+
+    StartUp();
+
     size_t fpsCounter = 0;
     uint64 lastPerformanceLoggingTime = SDL_GetPerformanceCounter();
-
-    while (running)
+    while (!m_shutDown)
     {
         const uint64 frameTimeStart = SDL_GetPerformanceCounter();
         {
-            const float lastPerformanceLoggingDeltaTime = (frameTimeStart - lastPerformanceLoggingTime) / (float) SDL_GetPerformanceFrequency() * SECONDS_TO_MILLISECONDS;
+            const float lastPerformanceLoggingDeltaTime = (frameTimeStart - lastPerformanceLoggingTime) / (float)SDL_GetPerformanceFrequency() * SECONDS_TO_MILLISECONDS;
             if (lastPerformanceLoggingDeltaTime >= 1000)
             {
                 ENGINE_DEBUG("FPS: %zd\n", fpsCounter);
@@ -40,42 +77,59 @@ int mutation_engine_run_loop(void)
             }
         }
 
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
-        {
-            if (event.type == SDL_QUIT)
-            {
-                running = false;
-            }
-            else if (event.type == SDL_KEYDOWN)
-            {
-                if (event.key.keysym.sym == SDLK_ESCAPE)
-                {
-                    running = false;
-                }
-            }
-        }
-
-        render_frame();
+        Update();
+        RenderFrame();
 
         {
             ++fpsCounter;
             const uint64 frameTimeEnd = SDL_GetPerformanceCounter();
 
-            const float elapsedFrameTime = (frameTimeEnd - frameTimeStart) / (float) SDL_GetPerformanceFrequency() * SECONDS_TO_MILLISECONDS;
+            const float elapsedFrameTime = (frameTimeEnd - frameTimeStart) / (float)SDL_GetPerformanceFrequency() * SECONDS_TO_MILLISECONDS;
+            RendererOptions rendererOptions = get_renderer_options();
             const float timeUntilTargetFrameTime = fmax(0.0f, rendererOptions.targetFrameTime - elapsedFrameTime);
             SDL_Delay(floor(timeUntilTargetFrameTime));
         }
     }
-    return 0;
+
+    ShutDown();
 }
 
-int mutation_engine_close(void)
+void GameEngine::SetEngineApplication(IEngineApplication& appInstance)
 {
-    if (close_renderer() != 0)
-    {
-        return 1;
-    }
+    m_appInstance = &appInstance;
+}
 
-    return 0;
+void GameEngine::Update()
+{
+    SDL_Event event;
+    while (SDL_PollEvent(&event))
+    {
+        if (event.type == SDL_QUIT)
+        {
+            m_shutDown = true;
+        }
+        else if (event.type == SDL_KEYDOWN)
+        {
+            if (event.key.keysym.sym == SDLK_ESCAPE)
+            {
+                m_shutDown = true;
+            }
+        }
+    }
+}
+
+void GameEngine::RenderFrame()
+{
+    render_frame();
+}
+
+void GameEngine::Close()
+{
+    m_shutDown = true;
+}
+
+void GameEngine::ShutDown()
+{
+    bool isRendererSuccessfullyClosed = close_renderer() == 0;
+    // ASSERT(isRendererSuccessfullyClosed, "Initializing renderer failed.");
 }

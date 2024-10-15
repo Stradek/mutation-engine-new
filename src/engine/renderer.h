@@ -4,21 +4,21 @@
 
 /************************* Renderer Settings *************************/
 
-typedef struct 
+struct RendererOptions
 {
     float targetFrameTime;
     uint8 targetFPS;
-} RendererOptions;
-
-extern RendererOptions rendererOptions;
+};
 
 /************************* SDL *************************/
 
-int init_sdl(void);
-int close_sdl(void);
+int init_sdl();
+int close_sdl();
 
 /************************* Renderer *************************/
 
-int init_renderer(void);
-int render_frame(void);
-int close_renderer(void);
+RendererOptions get_renderer_options();
+
+int init_renderer();
+int render_frame();
+int close_renderer();

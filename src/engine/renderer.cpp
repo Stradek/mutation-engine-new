@@ -5,17 +5,16 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_log.h>
 
-/************************* Renderer Settings *************************/
 
-RendererOptions rendererOptions = 
+RendererOptions rendererOptions
 {
-    -1, // set in cpp in set_renderer_options()
+    -1, // set in cpp in init_renderer_options()
     60
 };
 
-void init_renderer_options(void)
+RendererOptions get_renderer_options()
 {
-    rendererOptions.targetFrameTime = (float) SECONDS_TO_MILLISECONDS / rendererOptions.targetFPS;
+    return rendererOptions;
 }
 
 /************************* SDL *************************/
@@ -23,7 +22,7 @@ void init_renderer_options(void)
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
 
-int init_sdl(void) 
+int init_sdl() 
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) 
     {
@@ -50,7 +49,7 @@ int init_sdl(void)
     return 0;
 }
 
-int close_sdl(void) 
+int close_sdl() 
 {
     if (renderer != NULL)
     {
@@ -68,7 +67,12 @@ int close_sdl(void)
 
 /************************* Renderer *************************/
 
-int init_renderer(void)
+void init_renderer_options()
+{
+    rendererOptions.targetFrameTime = (float)SECONDS_TO_MILLISECONDS / rendererOptions.targetFPS;
+}
+
+int init_renderer()
 {
     init_renderer_options();
 
@@ -81,7 +85,7 @@ int init_renderer(void)
     return 0;
 }
 
-int render_frame(void)
+int render_frame()
 {
     SDL_SetRenderDrawColor(renderer, 94, 25, 20, 255);
     SDL_RenderClear(renderer);
@@ -90,7 +94,7 @@ int render_frame(void)
     return 0;
 }
 
-int close_renderer(void)
+int close_renderer()
 {
     if (close_sdl() != 0)
     {
