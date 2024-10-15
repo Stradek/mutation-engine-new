@@ -36,31 +36,69 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(EXTERNAL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external)
 
-# Game
-get_source_files(SOURCE_FILES 1 ${SOURCE_DIR})
-add_executable(MutationEngine-Pong "${SOURCE_FILES}")
-target_include_directories(MutationEngine-Pong PRIVATE ${SOURCE_DIR})
+#
+# Common
+#
+set(COMMON_DIR ${SOURCE_DIR}/common)
 
-############################################
-# SDL2
-############################################
+get_source_files(COMMON_SOURCE_FILES 1 ${COMMON_DIR})
+add_library(Common STATIC
+    "${COMMON_SOURCE_FILES}"
+)
+target_include_directories(Common PRIVATE
+    ${COMMON_DIR}
+)
+
+#
+# MutationEngine
+#
+
+set(ENGINE_DIR ${SOURCE_DIR}/engine)
+
+get_source_files(ENGINE_SOURCE_FILES 1 ${ENGINE_DIR})
+add_library(MutationEngine STATIC
+    "${ENGINE_SOURCE_FILES}"
+)
+target_include_directories(MutationEngine PRIVATE
+    ${ENGINE_DIR}
+    ${COMMON_DIR}
+)
+
+target_link_libraries(MutationEngine PUBLIC 
+    Common
+)
+
 
 # Link SDL2 libraries
-target_link_libraries(MutationEngine-Pong PRIVATE
+target_link_libraries(MutationEngine PRIVATE
     "${EXTERNAL_PATH}/SDL2/lib/SDL2.lib"
     "${EXTERNAL_PATH}/SDL2/lib/SDL2main.lib"
 )
 
 # Include SDL2 headers
-target_include_directories(MutationEngine-Pong PRIVATE
+target_include_directories(MutationEngine PRIVATE
     "${EXTERNAL_PATH}/SDL2/include/"
 )
 
-# Copy SDL2.dll to the output directory
-add_custom_command(TARGET MutationEngine-Pong POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy
-    "${EXTERNAL_PATH}/SDL2/lib/SDL2.dll"
-    $<TARGET_FILE_DIR:MutationEngine-Pong>
+#
+# Game
+#
+
+set(GAME_DIR ${SOURCE_DIR}/game)
+
+get_source_files(GAME_SOURCE_FILES 1 ${GAME_DIR})
+add_executable(Pong ${GAME_SOURCE_FILES})
+target_include_directories(Pong PRIVATE ${SOURCE_DIR})
+
+target_link_libraries(Pong PRIVATE 
+    MutationEngine
 )
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT MutationEngine-Pong)
+# Copy SDL2.dll to the output directory
+add_custom_command(TARGET Pong POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    "${EXTERNAL_PATH}/SDL2/lib/SDL2.dll"
+    $<TARGET_FILE_DIR:Pong>
+)
+
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Pong)

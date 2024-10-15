@@ -1,4 +1,4 @@
-#include "common/debug.h"
+#include "debug.h"
 
 bool is_debugger_attached(void)
 {

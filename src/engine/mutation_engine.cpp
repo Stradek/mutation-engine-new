@@ -5,8 +5,8 @@
 
 #include "mutation_engine.h"
 
-#include "common/types.h"
-#include "common/debug.h"
+#include "types.h"
+#include "debug.h"
 #include "renderer.h"
 #include "utils.h"
 
