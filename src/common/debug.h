@@ -13,11 +13,11 @@
 // TODO: might separate to ASSERT and FATAL_ASSERT in the future
 
 // assert macro
-#ifdef DEBUG
+#ifdef BUILD_DEBUG
 #define ASSERT(condition, message) \
     if (!(condition)) \
     { \
-        fprintf(stderr, "Assertion failed: (%s), function %s, file %s, line %d\nMessage: %s\n", #condition, __FUNCTION__, __FILE__, __LINE__, message); \
+        std::cerr << "Assertion failed: (" << #condition << "), function " << __func__  << " , file " << __FILE__ << ", line " << __LINE__ << "\nMessage: " << message << "\n"; \
         abort(); \
     }
 #else
@@ -27,17 +27,17 @@
 /************************* LOGGING *************************/
 
 // engine logging macros
-#ifdef DEBUG
+#ifdef BUILD_DEBUG
 #define ENGINE_DEBUG(message, ...) \
-    fprintf(stdout, "[ENGINE] [DEBUG] " message, ##__VA_ARGS__)
+    printf("[ENGINE] [DEBUG] " message "\n", ##__VA_ARGS__)
 #define ENGINE_INFO(message, ...) \
-    fprintf(stdout, "[ENGINE] [INFO] " message, ##__VA_ARGS__)
+    printf("[ENGINE] [INFO] " message "\n", ##__VA_ARGS__)
 #define ENGINE_WARN(message, ...) \
-    fprintf(stdout, "[ENGINE] [WARN] " message, ##__VA_ARGS__)
+    printf("[ENGINE] [WARN] " message "\n", ##__VA_ARGS__)
 #define ENGINE_ERROR(message, ...) \
-    fprintf(stderr, "[ENGINE] [ERROR] " message, ##__VA_ARGS__)
+    printf("[ENGINE] [ERROR] " message "\n", ##__VA_ARGS__)
 #define ENGINE_CRITICAL(message, ...) \
-    fprintf(stderr, "[ENGINE] [CRITICAL] " message, ##__VA_ARGS__)
+    printf("[ENGINE] [CRITICAL] " message "\n", ##__VA_ARGS__)
 #else
 #define ENGINE_DEBUG(message, ...)
 #define ENGINE_INFO(message, ...)
@@ -47,17 +47,17 @@
 #endif
 
 // game logging macros
-#ifdef DEBUG
+#ifdef BUILD_DEBUG
 #define GAME_DEBUG(message, ...) \
-    fprintf(stdout, "[GAME] [DEBUG] " message, ##__VA_ARGS__)
+    printf("[GAME] [DEBUG] " message "\n", ##__VA_ARGS__)
 #define GAME_INFO(message, ...) \
-    fprintf(stdout, "[GAME] [INFO] " message, ##__VA_ARGS__)
+    printf("[GAME] [INFO] " message "\n", ##__VA_ARGS__)
 #define GAME_WARN(message, ...) \
-    fprintf(stdout, "[GAME] [WARN] " message, ##__VA_ARGS__)
+    printf("[GAME] [WARN] " message "\n", ##__VA_ARGS__)
 #define GAME_ERROR(message, ...) \
-    fprintf(stderr, "[GAME] [ERROR] " message, ##__VA_ARGS__)
+    printf("[GAME] [ERROR] " message "\n", ##__VA_ARGS__)
 #define GAME_CRITICAL(message, ...) \
-    fprintf(stderr, "[GAME] [CRITICAL] " message, ##__VA_ARGS__)
+    printf("[GAME] [CRITICAL] " message "\n", ##__VA_ARGS__)
 #else
 #define GAME_DEBUG(message, ...)
 #define GAME_INFO(message, ...)
@@ -71,7 +71,7 @@
 bool is_debugger_attached(void);
 
 // debug break macro
-#ifdef DEBUG
+#ifdef BUILD_DEBUG
 #define DEBUG_BREAK() \
     if (is_debugger_attached()) \
     { \

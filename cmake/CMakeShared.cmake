@@ -99,12 +99,13 @@ function(custom_cmake_setup)
     
     # Set macros for configuration specific code
 
-    message("${CUSTOM_MACROS_PREFIX}")
-
+    
     add_compile_definitions(
-        "$<$<CONFIG:Debug>:${CUSTOM_MACROS_PREFIX}BUILD_DEBUG>"
-        "$<$<CONFIG:Release>:${CUSTOM_MACROS_PREFIX}BUILD_RELEASE>"
+        "$<$<CONFIG:Debug>:BUILD_DEBUG>"
+        "$<$<CONFIG:Release>:BUILD_RELEASE>"
     )
+    
+    message("${CUSTOM_MACROS_PREFIX}")
 
     #
     # Project Helper functions
