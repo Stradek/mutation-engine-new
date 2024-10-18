@@ -15,17 +15,16 @@ public:
 	GameEngine(GameEngine& m_gameEngine) = delete;
 	void operator=(GameEngine& m_gameEngine) = delete;
 
-
-	static GameEngine& GetInstance();
-	static void DestroyInstance();
-
 	static void Run(IEngineApplication& appInstanceRef);
 
 	void Close();
 private:
-	GameEngine();
-	virtual ~GameEngine();
-	
+	GameEngine() {};
+	virtual ~GameEngine() {};
+
+	static GameEngine& GetInstance();
+	static void DestroyInstance();
+
 	void SetEngineApplication(IEngineApplication& appInstanceRef);
 
 	void StartUp();
@@ -37,8 +36,8 @@ private:
 	void EngineRun(IEngineApplication& appInstance);
 
 	static GameEngine* m_instance;
-	IEngineApplication* m_appInstance;
-	bool m_shutDown;
+	IEngineApplication* m_appInstance = nullptr;
+	bool m_shutDown = false;
 
 	Renderer m_renderer;
 };

@@ -16,31 +16,6 @@
 
 GameEngine* GameEngine::m_instance = nullptr;
 
-GameEngine::GameEngine() : m_renderer(), m_appInstance(nullptr), m_shutDown(false)
-{
-}
-
-GameEngine::~GameEngine()
-{
-}
-
-GameEngine& GameEngine::GetInstance()
-{
-    if (!m_instance)
-    {
-        m_instance = new GameEngine();
-    }
-    return *m_instance;
-}
-
-void GameEngine::DestroyInstance()
-{
-    ASSERT(m_instance, "Game engine instance was called to be destroyed but it's not initialized.");
-
-    delete m_instance;
-    m_instance = nullptr;
-}
-
 void GameEngine::Run(IEngineApplication& appInstance)
 {
     // Core::Log::Init();
@@ -52,13 +27,6 @@ void GameEngine::Run(IEngineApplication& appInstance)
 
     GameEngine::DestroyInstance();
     // Core::Log::Close();
-}
-
-void GameEngine::StartUp()
-{
-    ENGINE_INFO("Hello! It's Mutation Engine!\n");
-
-    m_renderer.StartUp();
 }
 
 void GameEngine::EngineRun(IEngineApplication& appInstance)
@@ -99,9 +67,40 @@ void GameEngine::EngineRun(IEngineApplication& appInstance)
     ShutDown();
 }
 
+void GameEngine::Close()
+{
+    m_shutDown = true;
+}
+
+GameEngine& GameEngine::GetInstance()
+{
+    if (!m_instance)
+    {
+        m_instance = new GameEngine();
+    }
+    return *m_instance;
+}
+
+void GameEngine::DestroyInstance()
+{
+    ASSERT(m_instance, "Game engine instance was called to be destroyed but it's not initialized.");
+
+    delete m_instance;
+    m_instance = nullptr;
+}
+
+
+
 void GameEngine::SetEngineApplication(IEngineApplication& appInstance)
 {
     m_appInstance = &appInstance;
+}
+
+void GameEngine::StartUp()
+{
+    ENGINE_INFO("Hello! It's Mutation Engine!\n");
+
+    m_renderer.StartUp();
 }
 
 void GameEngine::Update()
@@ -126,11 +125,6 @@ void GameEngine::Update()
 void GameEngine::RenderFrame()
 {
     m_renderer.RenderFrame();
-}
-
-void GameEngine::Close()
-{
-    m_shutDown = true;
 }
 
 void GameEngine::ShutDown()
