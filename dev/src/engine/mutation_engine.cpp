@@ -5,6 +5,7 @@
 
 #include "mutation_engine.h"
 
+#include "engine_application.h"
 #include "types.h"
 #include "debug.h"
 #include "utils.h"
@@ -101,6 +102,8 @@ void GameEngine::StartUp()
     ENGINE_INFO("Hello! It's Mutation Engine!\n");
 
     m_renderer.StartUp();
+
+    m_appInstance->StartUp();
 }
 
 void GameEngine::Update()
@@ -120,6 +123,8 @@ void GameEngine::Update()
             }
         }
     }
+
+    m_appInstance->Update();
 }
 
 void GameEngine::RenderFrame()
@@ -129,5 +134,7 @@ void GameEngine::RenderFrame()
 
 void GameEngine::ShutDown()
 {
+    m_appInstance->ShutDown();
+
     m_renderer.ShutDown();
 }
