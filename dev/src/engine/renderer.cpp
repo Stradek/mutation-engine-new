@@ -39,6 +39,8 @@ void Renderer::InitSDL()
         ENGINE_CRITICAL("Unable to create renderer: %s", SDL_GetError());
         SDL_Quit();
     }
+
+    screenSurface = SDL_GetWindowSurface(window);
 }
 
 void Renderer::CloseSDL()

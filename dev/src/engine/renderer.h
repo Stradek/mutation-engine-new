@@ -37,4 +37,5 @@ public:
 private:
 	SDL_Window* window;
 	SDL_Renderer* sdlRenderer;
+	SDL_Surface* screenSurface;
 };
