@@ -7,6 +7,7 @@
 
 void Game::StartUp()
 {
+
 }
 
 void Game::Update()
@@ -15,4 +16,5 @@ void Game::Update()
 
 void Game::ShutDown()
 {
+
 }

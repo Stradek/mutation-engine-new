@@ -7,10 +7,12 @@
 
 #include "types.h"
 
-struct Entity
-{
-    uint32 id;
-    uint32 componentMask;
-};
+// let's make it naive approach first, then refine to ecs when we have basics
 
-void AddEntity(struct Entity *entity);
+//struct Entity
+//{
+//    uint32 id;
+//    uint32 componentMask;
+//};
+//
+//void AddEntity(struct Entity *entity);
