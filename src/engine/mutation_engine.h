@@ -15,7 +15,6 @@ public:
 	GameEngine(GameEngine& m_gameEngine) = delete;
 	void operator=(GameEngine& m_gameEngine) = delete;
 
-	GameEngine();
 
 	static GameEngine& GetInstance();
 	static void DestroyInstance();
@@ -24,6 +23,9 @@ public:
 
 	void Close();
 private:
+	GameEngine();
+	virtual ~GameEngine();
+	
 	void SetEngineApplication(IEngineApplication& appInstanceRef);
 
 	void StartUp();
@@ -36,7 +38,7 @@ private:
 
 	static GameEngine* m_instance;
 	IEngineApplication* m_appInstance;
-	bool m_shutDown = false;
+	bool m_shutDown;
 
 	Renderer m_renderer;
 };

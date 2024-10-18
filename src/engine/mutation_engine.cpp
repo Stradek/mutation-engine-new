@@ -14,9 +14,13 @@
 #include <math.h>
 #include <stdio.h>
 
-GameEngine* GameEngine::m_instance;
+GameEngine* GameEngine::m_instance = nullptr;
 
-GameEngine::GameEngine() : m_appInstance(nullptr)
+GameEngine::GameEngine() : m_renderer(), m_appInstance(nullptr), m_shutDown(false)
+{
+}
+
+GameEngine::~GameEngine()
 {
 }
 
@@ -25,13 +29,16 @@ GameEngine& GameEngine::GetInstance()
     if (!m_instance)
     {
         m_instance = new GameEngine();
-        // ENGINE_ASSERT(m_instance, "Failed to allocate engine instance.");
     }
     return *m_instance;
 }
 
 void GameEngine::DestroyInstance()
 {
+    ASSERT(m_instance, "Game engine instance was called to be destroyed but it's not initialized.");
+
+    delete m_instance;
+    m_instance = nullptr;
 }
 
 void GameEngine::Run(IEngineApplication& appInstance)
