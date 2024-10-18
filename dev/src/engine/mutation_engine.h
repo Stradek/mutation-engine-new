@@ -19,7 +19,7 @@ public:
 
 	void Close();
 private:
-	GameEngine() {};
+	GameEngine() = default;
 	virtual ~GameEngine() {};
 
 	static GameEngine& GetInstance();
