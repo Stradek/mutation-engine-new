@@ -5,6 +5,6 @@
 
 #include "entity.h"
 
-void AddEntity(Entity* entity)
-{
-}
+//void AddEntity(Entity* entity)
+//{
+//}
