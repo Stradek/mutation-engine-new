@@ -8,8 +8,8 @@
 #include "system.h"
 #include "types.h"
 
-#include <SDL2/SDL_video.h>
-#include <SDL2/SDL_render.h>
+#include <SDL_video.h>
+#include <SDL_render.h>
 
 struct RendererOptions
 {
@@ -27,15 +27,16 @@ public:
 	void StartUp() override;
 	void ShutDown() override;
 
-	void InitSDL();
-	void CloseSDL();
-
-	void InitRendererOptions();
-	static RendererOptions GetRendererOptions();
+	static RendererOptions GetRendererConfiguration();
 
 	void RenderFrame();
 private:
-	SDL_Window* window;
-	SDL_Renderer* sdlRenderer;
-	SDL_Surface* screenSurface;
+	void InitSDL();
+	void CloseSDL();
+
+	void InitRendererConfiguration();
+
+	SDL_Window* window = nullptr;
+	SDL_Renderer* sdlRenderer = nullptr;
+	SDL_Surface* screenSurface = nullptr;
 };

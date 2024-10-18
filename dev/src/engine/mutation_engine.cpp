@@ -10,7 +10,7 @@
 #include "debug.h"
 #include "utils.h"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include <math.h>
 #include <stdio.h>
@@ -59,7 +59,7 @@ void GameEngine::EngineRun(IEngineApplication& appInstance)
             const uint64 frameTimeEnd = SDL_GetPerformanceCounter();
 
             const float elapsedFrameTime = (frameTimeEnd - frameTimeStart) / (float)SDL_GetPerformanceFrequency() * SECONDS_TO_MILLISECONDS;
-            RendererOptions rendererOptions = Renderer::GetRendererOptions();
+            RendererOptions rendererOptions = Renderer::GetRendererConfiguration();
             const float timeUntilTargetFrameTime = fmax(0.0f, rendererOptions.targetFrameTime - elapsedFrameTime);
             SDL_Delay(floor(timeUntilTargetFrameTime));
         }

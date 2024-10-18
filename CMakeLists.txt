@@ -33,8 +33,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 # Directories paths
 #
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dev/src)
-set(EXTERNAL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/external)
+set(DEVELOPMENT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dev)
+set(SOURCE_DIR ${DEVELOPMENT_DIR}/src)
+set(EXTERNAL_PATH ${DEVELOPMENT_DIR}/external)
 
 #
 # Common
@@ -73,11 +74,13 @@ target_link_libraries(MutationEngine PUBLIC
 target_link_libraries(MutationEngine PRIVATE
     "${EXTERNAL_PATH}/SDL2/lib/SDL2.lib"
     "${EXTERNAL_PATH}/SDL2/lib/SDL2main.lib"
+    "${EXTERNAL_PATH}/SDL2_image/lib/SDL2_image.lib"
 )
 
 # Include SDL2 headers
 target_include_directories(MutationEngine PUBLIC
     "${EXTERNAL_PATH}/SDL2/include/"
+    "${EXTERNAL_PATH}/SDL2_image/include/"
 )
 
 #
@@ -102,6 +105,13 @@ target_link_libraries(Pong PRIVATE
 add_custom_command(TARGET Pong POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy
     "${EXTERNAL_PATH}/SDL2/lib/SDL2.dll"
+    $<TARGET_FILE_DIR:Pong>
+)
+
+# Copy SDL2_image.dll to the output directory
+add_custom_command(TARGET Pong POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    "${EXTERNAL_PATH}/SDL2_image/lib/SDL2_image.dll"
     $<TARGET_FILE_DIR:Pong>
 )
 

@@ -4,11 +4,19 @@
 */
 
 #pragma once
+#include <SDL_surface.h>
 
 class Level
 {
-	Level();
+public:
 	~Level();
+
+	void Init();
+private:
 	void LoadAssets();
 	void DestroyAssets();
+	
+	void LoadLevel();
+
+	SDL_Surface* whitePixelImage = nullptr;
 };

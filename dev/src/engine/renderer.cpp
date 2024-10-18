@@ -3,19 +3,20 @@
 #include "utils.h"
 #include "debug.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_log.h>
+#include <SDL.h>
+#include <SDL_log.h>
+#include <SDL_image.h>
 
 
-RendererOptions rendererOptions
+RendererOptions rendererConfiguration
 {
     -1, // set in cpp in init_renderer_options()
     60
 };
 
-RendererOptions Renderer::GetRendererOptions()
+RendererOptions Renderer::GetRendererConfiguration()
 {
-    return rendererOptions;
+    return rendererConfiguration;
 }
 
 void Renderer::InitSDL() 
@@ -23,6 +24,11 @@ void Renderer::InitSDL()
     if (SDL_Init(SDL_INIT_VIDEO) != 0) 
     {
         ENGINE_CRITICAL("Unable to initialize SDL: %s", SDL_GetError());
+    }
+
+    if (IMG_Init(IMG_INIT_PNG) == 0)
+    {
+        ENGINE_CRITICAL("Failed to initialize SDL_image: ", IMG_GetError());
     }
 
     window = SDL_CreateWindow("Mutation Engine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
@@ -48,20 +54,24 @@ void Renderer::CloseSDL()
     if (sdlRenderer != NULL)
     {
         SDL_DestroyRenderer(sdlRenderer);
+        sdlRenderer = nullptr;
     }
 
     if (window != NULL)
     {
         SDL_DestroyWindow(window);
+        window = nullptr;
     }
+
+    IMG_Quit();
 
     SDL_Quit();
 }
 
 
-void Renderer::InitRendererOptions()
+void Renderer::InitRendererConfiguration()
 {
-    rendererOptions.targetFrameTime = (float)SECONDS_TO_MILLISECONDS / rendererOptions.targetFPS;
+    rendererConfiguration.targetFrameTime = (float)SECONDS_TO_MILLISECONDS / rendererConfiguration.targetFPS;
 }
 
 void Renderer::RenderFrame()
@@ -72,13 +82,13 @@ void Renderer::RenderFrame()
     SDL_RenderPresent(sdlRenderer);
 }
 
-Renderer::Renderer() : window(nullptr), sdlRenderer(nullptr)
+Renderer::Renderer()
 {
 }
 
 void Renderer::StartUp()
 {
-    InitRendererOptions();
+    InitRendererConfiguration();
 
     InitSDL();
 }

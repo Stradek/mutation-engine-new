@@ -7,7 +7,7 @@
 
 void Game::StartUp()
 {
-
+	level.Init();
 }
 
 void Game::Update()
