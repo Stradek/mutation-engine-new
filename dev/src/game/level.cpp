@@ -12,6 +12,7 @@
 #include <SDL_image.h>
 
 #include <filesystem>
+#include <ecs_manager.h>
 
 std::filesystem::path GetResourcePath(const char* resourcePath)
 {
@@ -51,5 +52,8 @@ void Level::DestroyAssets()
 
 void Level::LoadLevel()
 {
-
+	EntityComponentSystemManager* ecsManager = EntityComponentSystemManager::GetInstance();
+	Entity& entity = ecsManager->AddEntity();
+	entity.AddComponent<TransformComponent>();
+	entity.AddComponent<SpriteRenderingComponent>();
 }

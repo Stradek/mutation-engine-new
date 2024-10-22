@@ -17,20 +17,55 @@
 
 GameEngine* GameEngine::m_instance = nullptr;
 
+GameEngine& GameEngine::GetInstance()
+{
+    if (!m_instance)
+    {
+        m_instance = new GameEngine();
+    }
+    return *m_instance;
+}
+
+void GameEngine::DestroyInstance()
+{
+    ASSERT(m_instance, "Game engine instance was called to be destroyed but it's not initialized.");
+
+    delete m_instance;
+    m_instance = nullptr;
+}
+
 void GameEngine::Run(IEngineApplication& appInstance)
 {
     // Core::Log::Init();
 
     {
         GameEngine& engineInstance = GameEngine::GetInstance();
-        engineInstance.EngineRun(appInstance);
+        engineInstance._Run(appInstance);
     }
 
     GameEngine::DestroyInstance();
     // Core::Log::Close();
 }
 
-void GameEngine::EngineRun(IEngineApplication& appInstance)
+
+void GameEngine::SetEngineApplication(IEngineApplication& appInstance)
+{
+    m_appInstance = &appInstance;
+}
+
+void GameEngine::StartUp()
+{
+    ENGINE_INFO("Hello! It's Mutation Engine!\n");
+
+    m_renderer.StartUp();
+
+    m_entityComponentSystemManager = EntityComponentSystemManager::GetInstance();
+    m_entityComponentSystemManager->StartUp();
+
+    m_appInstance->StartUp();
+}
+
+void GameEngine::_Run(IEngineApplication& appInstance)
 {
     SetEngineApplication(appInstance);
 
@@ -68,44 +103,6 @@ void GameEngine::EngineRun(IEngineApplication& appInstance)
     ShutDown();
 }
 
-void GameEngine::Close()
-{
-    m_shutDown = true;
-}
-
-GameEngine& GameEngine::GetInstance()
-{
-    if (!m_instance)
-    {
-        m_instance = new GameEngine();
-    }
-    return *m_instance;
-}
-
-void GameEngine::DestroyInstance()
-{
-    ASSERT(m_instance, "Game engine instance was called to be destroyed but it's not initialized.");
-
-    delete m_instance;
-    m_instance = nullptr;
-}
-
-
-
-void GameEngine::SetEngineApplication(IEngineApplication& appInstance)
-{
-    m_appInstance = &appInstance;
-}
-
-void GameEngine::StartUp()
-{
-    ENGINE_INFO("Hello! It's Mutation Engine!\n");
-
-    m_renderer.StartUp();
-
-    m_appInstance->StartUp();
-}
-
 void GameEngine::Update()
 {
     SDL_Event event;
@@ -124,6 +121,7 @@ void GameEngine::Update()
         }
     }
 
+    m_entityComponentSystemManager->Update();
     m_appInstance->Update();
 }
 
@@ -132,9 +130,15 @@ void GameEngine::RenderFrame()
     m_renderer.RenderFrame();
 }
 
+void GameEngine::Close()
+{
+    m_shutDown = true;
+}
+
 void GameEngine::ShutDown()
 {
     m_appInstance->ShutDown();
 
+    m_entityComponentSystemManager->ShutDown();
     m_renderer.ShutDown();
 }

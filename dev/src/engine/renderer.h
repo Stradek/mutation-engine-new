@@ -28,7 +28,7 @@ public:
 	void ShutDown() override;
 
 	static RendererOptions GetRendererConfiguration();
-
+	
 	void RenderFrame();
 private:
 	void InitSDL();

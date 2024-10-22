@@ -6,22 +6,22 @@
 #pragma once
 
 #include "renderer.h"
+#include "ecs_manager.h"
 
 class IEngineApplication;
 
 class GameEngine
 {
 public:
-	GameEngine(GameEngine& m_gameEngine) = delete;
-	void operator=(GameEngine& m_gameEngine) = delete;
+	GameEngine(GameEngine& other) = delete;
+	void operator=(GameEngine& other) = delete;
+
+	GameEngine() = default;
 
 	static void Run(IEngineApplication& appInstanceRef);
 
 	void Close();
 private:
-	GameEngine() = default;
-	virtual ~GameEngine() {};
-
 	static GameEngine& GetInstance();
 	static void DestroyInstance();
 
@@ -33,11 +33,12 @@ private:
 	void Update();
 	void RenderFrame();
 
-	void EngineRun(IEngineApplication& appInstance);
+	void _Run(IEngineApplication& appInstance);
 
 	static GameEngine* m_instance;
 	IEngineApplication* m_appInstance = nullptr;
 	bool m_shutDown = false;
 
 	Renderer m_renderer;
+	EntityComponentSystemManager* m_entityComponentSystemManager;
 };
